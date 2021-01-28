@@ -1,0 +1,109 @@
+﻿@model UniversitySystem.ViewModels.StudentDetailsViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Student Details</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DateOfBirth)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DateOfBirth)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Semesters)
+            <br />
+            @foreach (var item in Model.Semesters)
+            {
+                @Html.DisplayNameFor(model => item.StartDate)
+                <br />
+                @Html.DisplayNameFor(model => item.EndDate)
+                <br /><br /><br />
+            }
+        </dt>
+        <dd class="col-sm-10">
+            @foreach (var item in Model.Semesters)
+            {
+
+                @item.SemesterName
+                <br />
+                @item.StartDate.ToString("dd-MM-yyyy");
+                <br />
+                @item.EndDate.ToString("dd-MM-yyyy");
+                <br />
+                <br />
+            }
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Scores)
+            <br />
+            @foreach (var item in Model.Scores)
+            {
+                @Html.DisplayNameFor(model => item.DisiplineName)
+                <br />
+                @Html.DisplayNameFor(model => item.ProfessorName)
+                <br />
+                @Html.DisplayNameFor(model => item.ScoreNumber)
+                <br /><br />
+            }
+        </dt>
+        <dd class="col-sm-10">
+            @foreach (var item in Model.Scores)
+            {
+                <br />
+                @item.DisiplineName
+                <br />
+                @item.ProfessorName;
+                <br />
+                @item.ScoreNumber;
+                <br />
+            }
+        </dd>
+        @*<dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.EndDate)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.EndDate)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.DisiplineName)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.DisiplineName)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.ProfessorName)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.ProfessorName)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.ScoreNumber)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.ScoreNumber)
+            </dd>*@
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

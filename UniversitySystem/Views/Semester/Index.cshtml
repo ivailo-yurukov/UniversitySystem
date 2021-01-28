@@ -1,0 +1,99 @@
+﻿@model IEnumerable<UniversitySystem.ViewModels.SemesterViewModel>
+
+@{
+    ViewData["Title"] = "Semesters";
+    var test = string.Empty;
+}
+
+<h1>Semesters</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SemesterName)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.DisciplineName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProfessorName)
+            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.Disciplines)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndDate)
+            </th>
+            @*<th>
+            @Html.DisplayNameFor(model => model.Student)
+        </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedOn)
+            </th>
+            @*<th>
+            @Html.DisplayNameFor(model => model.ModifiedOn)
+        </th>*@
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SemesterName)
+            </td>
+            @*<td> 
+                @foreach (var name in item.DisciplineName)
+                {
+                    @name 
+                    <br />
+                }
+            </td>
+            <td>
+                @foreach (var name in item.ProfessorName)
+                {
+                    @name
+                    <br />
+                }
+            </td>*@
+            <td>
+                @foreach (var discipline in item.Disciplines)
+                {
+                    @discipline.DisciplineName @:&#45;
+                    @discipline.ProfessorName
+                    <br />
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+            @*<td>
+            @Html.DisplayFor(modelItem => item.Student.FirstName)
+            @Html.DisplayFor(modelItem => item.Student.LastName)
+        </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedOn)
+            </td>
+            @*<td>
+            @Html.DisplayFor(modelItem => item.Student.ModifiedOn)
+        </td>*@
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,51 @@
+﻿@model IEnumerable<UniversitySystem.Models.Student>
+
+@{
+    ViewData["Title"] = "Student Page";
+    //var counter = 0;
+}
+
+<div class="text-center">
+    <h1 class="display-4">All Students</h1>
+</div>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">FirstName</th>
+            <th scope="col">LastName</th>
+            <th scope="col">DateOfBirth</th>
+            <th scope="col">Semesters</th>
+            <th scope="col">
+                <a asp-action="Create" class="btn btn-outline-success">
+                    <i class="far fa-plus-square m-1"></i>Create
+                </a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var students in Model)
+        {
+            <tr>
+                @*<th scope="row">@counter</th>*@
+                <td>@students.Id</td>
+                <td>@students.FirstName</td>
+                <td>@students.LastName</td>
+                <td>@students.DateOfBirth.ToString("dd-MM-yyyy")</td>
+                <td>
+                    @foreach (var semester in @students.Semesters)
+                    {
+                        @semester.SemesterName
+                        <br />
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@students.Id"><i class="fa fa-edit fa-lg"></i></a>
+                    <a asp-action="Details" asp-route-id="@students.Id" class="text-info ml-2"><i class="fa fa-info-circle fa-lg"></i></a>
+                    <a asp-action="Delete" asp-route-id="@students.Id" class="text-danger ml-2"><i class="fa fa-trash-alt fa-lg"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
