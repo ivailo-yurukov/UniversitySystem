@@ -1,0 +1,49 @@
+﻿@model UniversitySystem.ViewModels.DisciplineViewModel
+
+@{
+    ViewData["Title"] = "AddSemester";
+    //var semesters = Model.Semesters.Select(x => new SelectListItem(x.SemesterName, x.Id.ToString()));
+}
+
+<h1>Add Semester</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DisciplineName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DisciplineName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ProfessorName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ProfessorName)
+        </dd>
+
+    </dl>
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="AddSemester">
+                <input type="hidden" asp-for="Id" />
+                <div class="form-group">
+                    <label asp-for="SemesterId" class="control-label"></label>
+                    <select asp-for="SemesterId" class="form-control" asp-items="Model.SelectListItems">
+                        <option>-- Select Semester --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="submit" name="submit" value="Add" class="btn btn-primary" />
+                    <input type="submit" name="submit" value="Delete" class="btn btn-danger" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+<div>
+    @*<a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |*@
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -1,4 +1,5 @@
 ﻿using AspNetCoreTemplate.Data.Common.Models;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace UniversitySystem.Models
@@ -13,6 +14,8 @@ namespace UniversitySystem.Models
 
         public int? SemesterId { get; set; }
 
-        public virtual Semester Semester { get; set; }
+        public Semester Semester { get; set; }
+
+        public virtual ICollection<Score> Scores { get; set; }
     }
 }

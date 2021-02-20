@@ -12,7 +12,7 @@ namespace UniversitySystem.Models
         public Semester()
         {
             this.Disciplines = new HashSet<Discipline>();
-            this.Scores = new HashSet<Score>();
+            this.StudentSemesters = new HashSet<StudentSemester>();
         }
 
         [StringLength(50)]
@@ -20,14 +20,10 @@ namespace UniversitySystem.Models
 
         public DateTime StartDate { get; set; }
 
-        public DateTime EndDate { get; set; }
-
-        public int? StudentId { get; set; }
-
-        public virtual Student Student { get; set; }
+        public DateTime EndDate { get; set; }       
 
         public virtual ICollection<Discipline> Disciplines { get; set; }
 
-        public virtual ICollection<Score> Scores { get; set; }
+        public virtual ICollection<StudentSemester> StudentSemesters { get; set; }
     }
 }

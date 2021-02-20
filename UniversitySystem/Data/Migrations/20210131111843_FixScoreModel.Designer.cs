@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UniversitySystem.Data;
 
 namespace UniversitySystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210131111843_FixScoreModel")]
+    partial class FixScoreModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -248,24 +250,6 @@ namespace UniversitySystem.Data.Migrations
                     b.HasIndex("SemesterId");
 
                     b.ToTable("Disciplines");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedOn = new DateTime(2021, 1, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DisciplineName = "Math",
-                            ProfessorName = "Newton",
-                            SemesterId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedOn = new DateTime(2021, 1, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DisciplineName = "Programming",
-                            ProfessorName = "Mustain",
-                            SemesterId = 1
-                        });
                 });
 
             modelBuilder.Entity("UniversitySystem.Models.Score", b =>
@@ -286,20 +270,6 @@ namespace UniversitySystem.Data.Migrations
                     b.HasIndex("DisciplineId");
 
                     b.ToTable("Scores");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            DisciplineId = 1,
-                            ScoreNumber = 5
-                        },
-                        new
-                        {
-                            Id = 2,
-                            DisciplineId = 2,
-                            ScoreNumber = 6
-                        });
                 });
 
             modelBuilder.Entity("UniversitySystem.Models.Semester", b =>

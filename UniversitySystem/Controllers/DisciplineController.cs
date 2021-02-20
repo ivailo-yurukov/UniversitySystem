@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using UniversitySystem.Data;
 using UniversitySystem.Models;
 using UniversitySystem.ViewModels;
@@ -20,7 +21,7 @@ namespace UniversitySystem.Controllers
         }
 
         // GET: DisciplineController
-        public ActionResult Index()
+        public IActionResult Index()
         {
             var disciplneViewModel = context.Disciplines
                 .OrderBy(x => x.DisciplineName)
@@ -39,7 +40,7 @@ namespace UniversitySystem.Controllers
         }
 
         // GET: DisciplineController/Create
-        public ActionResult Create()
+        public IActionResult Create()
         {
             return View();
         }
@@ -47,7 +48,7 @@ namespace UniversitySystem.Controllers
         // POST: DisciplineController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(DisciplineViewModel disciplineViewModel)
+        public async Task<IActionResult> Create(DisciplineViewModel disciplineViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +66,7 @@ namespace UniversitySystem.Controllers
         }
 
         // GET: DisciplineController/Edit/5
-        public ActionResult Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
@@ -88,7 +89,7 @@ namespace UniversitySystem.Controllers
         // POST: DisciplineController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(int id, DisciplineViewModel disciplineViewModel)
+        public async Task<IActionResult> Edit(int id, DisciplineViewModel disciplineViewModel)
         {
             if (id != disciplineViewModel.Id)
             {
@@ -111,7 +112,7 @@ namespace UniversitySystem.Controllers
         }
 
         // GET: DisciplineController/Delete/5
-        public ActionResult Delete(int id)
+        public IActionResult Delete(int id)
         {
             var discipline = context.Disciplines.Find(id);
             var disciplineViewModel = new DisciplineViewModel
@@ -126,16 +127,49 @@ namespace UniversitySystem.Controllers
         // POST: DisciplineController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Delete(DisciplineViewModel disciplineViewModel)
+        public async Task<IActionResult> Delete(DisciplineViewModel disciplineViewModel)
         {
             var discipline = new Discipline
             {
-                Id = disciplineViewModel.Id,               
+                Id = disciplineViewModel.Id,
             };
 
             context.Disciplines.Remove(discipline);
             await context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult AddSemester(int id)
+        {
+            var discipline = context.Disciplines.Find(id);
+            var semesters = context.Semesters
+                .Select(x => new SelectListItem(x.SemesterName, x.Id.ToString()))
+                .ToList();
+
+            var disciplineViewModel = new DisciplineViewModel
+            {
+                DisciplineName = discipline.DisciplineName,
+                ProfessorName = discipline.ProfessorName,
+                SelectListItems = new List<SelectListItem>(semesters),
+            };
+
+            return View(disciplineViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddSemester(string submit, DisciplineViewModel disciplineViewModel)
+        {
+            var discipline = new Discipline
+            {
+                SemesterId = disciplineViewModel.SemesterId,
+            };
+            if (submit == "Add")
+            {
+                context.Update(discipline);
+                await context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View();
         }
     }
 }

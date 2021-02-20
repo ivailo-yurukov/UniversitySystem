@@ -176,3 +176,6 @@ C:\Users\GhzUser\source\repos\UniversitySystem\UniversitySystem\obj\Debug\netcor
 C:\Users\GhzUser\source\repos\UniversitySystem\UniversitySystem\obj\Debug\netcoreapp3.1\Razor\Views\Discipline\Edit.cshtml.g.cs
 C:\Users\GhzUser\source\repos\UniversitySystem\UniversitySystem\obj\Debug\netcoreapp3.1\Razor\Views\Discipline\Delete.cshtml.g.cs
 C:\Users\GhzUser\source\repos\UniversitySystem\UniversitySystem\obj\Debug\netcoreapp3.1\Razor\Views\Semester\Create.cshtml.g.cs
+C:\Users\GhzUser\source\repos\UniversitySystem\UniversitySystem\obj\Debug\netcoreapp3.1\Razor\Views\Student\AddStudentSemester.cshtml.g.cs
+C:\Users\GhzUser\source\repos\UniversitySystem\UniversitySystem\obj\Debug\netcoreapp3.1\Razor\Views\Semester\Delete.cshtml.g.cs
+C:\Users\GhzUser\source\repos\UniversitySystem\UniversitySystem\obj\Debug\netcoreapp3.1\Razor\Views\Discipline\AddSemester.cshtml.g.cs

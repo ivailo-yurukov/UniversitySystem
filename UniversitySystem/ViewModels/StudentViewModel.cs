@@ -1,18 +1,14 @@
-﻿using AspNetCoreTemplate.Data.Common.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace UniversitySystem.Models
+namespace UniversitySystem.ViewModels
 {
-    public class Student : BaseModel<int>
+    public class StudentViewModel
     {
-        public Student()
-        {
-            this.StudentSemesters = new HashSet<StudentSemester>();
-        }
+        public int Id { get; set; }
 
         [Required]
         [StringLength(50)]
@@ -24,6 +20,6 @@ namespace UniversitySystem.Models
 
         public DateTime DateOfBirth { get; set; }
 
-        public virtual ICollection<StudentSemester>  StudentSemesters { get; set; }
+        public ICollection<string> Semesters { get; set; }
     }
 }

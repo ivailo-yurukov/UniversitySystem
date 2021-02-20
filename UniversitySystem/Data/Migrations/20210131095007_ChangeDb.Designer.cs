@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UniversitySystem.Data;
 
 namespace UniversitySystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210131095007_ChangeDb")]
+    partial class ChangeDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -248,24 +250,6 @@ namespace UniversitySystem.Data.Migrations
                     b.HasIndex("SemesterId");
 
                     b.ToTable("Disciplines");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedOn = new DateTime(2021, 1, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DisciplineName = "Math",
-                            ProfessorName = "Newton",
-                            SemesterId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedOn = new DateTime(2021, 1, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DisciplineName = "Programming",
-                            ProfessorName = "Mustain",
-                            SemesterId = 1
-                        });
                 });
 
             modelBuilder.Entity("UniversitySystem.Models.Score", b =>
@@ -275,15 +259,27 @@ namespace UniversitySystem.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("DisciplineId")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DisiplineName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ProfessorName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ScoreNumber")
                         .HasColumnType("int");
 
+                    b.Property<int?>("SemesterId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("DisciplineId");
+                    b.HasIndex("SemesterId");
 
                     b.ToTable("Scores");
 
@@ -291,14 +287,20 @@ namespace UniversitySystem.Data.Migrations
                         new
                         {
                             Id = 1,
-                            DisciplineId = 1,
-                            ScoreNumber = 5
+                            CreatedOn = new DateTime(2021, 1, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisiplineName = "Math",
+                            ProfessorName = "Newton",
+                            ScoreNumber = 4,
+                            SemesterId = 1
                         },
                         new
                         {
                             Id = 2,
-                            DisciplineId = 2,
-                            ScoreNumber = 6
+                            CreatedOn = new DateTime(2021, 1, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisiplineName = "History",
+                            ProfessorName = "Ivanov",
+                            ScoreNumber = 5,
+                            SemesterId = 1
                         });
                 });
 
@@ -416,6 +418,39 @@ namespace UniversitySystem.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("UniversitySystem.ViewModels.DisciplineViewModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DisciplineName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ProfessorName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<int?>("SemesterId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SemesterId");
+
+                    b.ToTable("DisciplineViewModel");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -476,9 +511,9 @@ namespace UniversitySystem.Data.Migrations
 
             modelBuilder.Entity("UniversitySystem.Models.Score", b =>
                 {
-                    b.HasOne("UniversitySystem.Models.Discipline", "Discipline")
+                    b.HasOne("UniversitySystem.Models.Semester", "Semester")
                         .WithMany("Scores")
-                        .HasForeignKey("DisciplineId");
+                        .HasForeignKey("SemesterId");
                 });
 
             modelBuilder.Entity("UniversitySystem.Models.StudentSemester", b =>
@@ -494,6 +529,13 @@ namespace UniversitySystem.Data.Migrations
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("UniversitySystem.ViewModels.DisciplineViewModel", b =>
+                {
+                    b.HasOne("UniversitySystem.Models.Semester", "Semester")
+                        .WithMany()
+                        .HasForeignKey("SemesterId");
                 });
 #pragma warning restore 612, 618
         }

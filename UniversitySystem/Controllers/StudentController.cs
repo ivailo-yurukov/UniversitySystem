@@ -22,53 +22,47 @@ namespace UniversitySystem.Controllers
         // GET: StudentController
         public IActionResult Index()
         {
-            var students = context.Students
+            var studentViewModel = context.Students
                 .OrderBy(x => x.Id)
                 .Select(s =>
-            new Student
+            new StudentViewModel
             {
                 Id = s.Id,
                 FirstName = s.FirstName,
                 LastName = s.LastName,
                 DateOfBirth = s.DateOfBirth,
-                Semesters = s.Semesters
-                .Where(x => x.StudentId == s.Id)
+                Semesters = s.StudentSemesters
+                .Where(st => st.StudentId == st.Student.Id)
+                .Select(sem => sem.Semester.SemesterName)
                 .ToList()
             })
             .ToList();
-            return View(students);
+
+            return View(studentViewModel);
         }
 
         // GET: StudentController/Details/5
         public IActionResult Details(int id, StudentDetailsViewModel detailsViewModel)
         {
             var student = context.Students.Find(id);
-            var semesters = context.Semesters
+            var semesters = context.StudentSemesters
                 .Where(x => x.StudentId == id)
-                .Select(x =>
+                .Select(s =>
                 new Semester
                 {
-                    SemesterName = x.SemesterName,
-                    StartDate = x.StartDate,
-                    EndDate = x.EndDate,
+                    SemesterName = s.Semester.SemesterName,
+                    StartDate = s.Semester.StartDate,
+                    EndDate = s.Semester.EndDate,
+                })
+                .ToList();
 
-                }).ToList();
-
-            var scores = context.Semesters
-                .Where(x => x.StudentId == id)
-                .Select(x => x.Scores
-                               .Select(x => new Score
-                               {
-                                   DisiplineName = x.DisiplineName,
-                                   ProfessorName = x.ProfessorName,
-                                   ScoreNumber = x.ScoreNumber,
-                               })).FirstOrDefault();
-            
-            detailsViewModel.FirstName = student.FirstName;
-            detailsViewModel.LastName = student.LastName;
-            detailsViewModel.DateOfBirth = student.DateOfBirth.ToString("dd-MM-yyyy");
-            detailsViewModel.Semesters = semesters;
-            detailsViewModel.Scores = scores ?? new List<Score>();
+            detailsViewModel = new StudentDetailsViewModel
+            {
+                FirstName = student.FirstName,
+                LastName = student.LastName,
+                DateOfBirth = student.DateOfBirth.ToString("dd-MM-yyyy"),
+                Semesters = semesters,
+            };
 
             return View(detailsViewModel);
         }
@@ -124,6 +118,64 @@ namespace UniversitySystem.Controllers
             }
 
             return View(student);
+        }
+
+        public IActionResult AddStudentSemester(int id)
+        {
+            var student = context.Students.Find(id);
+            var semesters = context.Semesters.ToList();
+            var studentSemesterModel = new StudentSemesterViewModel
+            {
+                FirstName = student.FirstName,
+                LastName = student.LastName,
+                Semesters = semesters,
+            };
+
+            return View(studentSemesterModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddStudentSemester(string submit, StudentSemesterViewModel viewModel)
+        {
+            var studentSemester = new StudentSemester
+            {
+                StudentId = viewModel.Id,
+                SemesterId = viewModel.SemesterId,
+            };
+
+            if (submit == "Add")
+            {              
+                try
+                {
+                    await context.AddAsync(studentSemester);
+                    await context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception)
+                {
+                    if (viewModel.SemesterId == 0)
+                    {
+                        return NotFound("Please select a semester!");
+                    }
+                    var semester = context.Semesters.
+                    Where(x => x.Id == viewModel.SemesterId)
+                    .Select(s => s.SemesterName)
+                    .FirstOrDefault();
+
+                    return NotFound($"This student has {semester}");
+                }
+            }
+
+            try
+            {
+                context.Remove(studentSemester);
+                await context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception)
+            {
+                return NotFound("The student doesn`t have such semester!");
+            }  
         }
 
         // GET: StudentController/Delete/5

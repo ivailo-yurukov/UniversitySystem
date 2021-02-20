@@ -52,31 +52,7 @@
                 <br />
             }
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Scores)
-            <br />
-            @foreach (var item in Model.Scores)
-            {
-                @Html.DisplayNameFor(model => item.DisiplineName)
-                <br />
-                @Html.DisplayNameFor(model => item.ProfessorName)
-                <br />
-                @Html.DisplayNameFor(model => item.ScoreNumber)
-                <br /><br />
-            }
-        </dt>
-        <dd class="col-sm-10">
-            @foreach (var item in Model.Scores)
-            {
-                <br />
-                @item.DisiplineName
-                <br />
-                @item.ProfessorName;
-                <br />
-                @item.ScoreNumber;
-                <br />
-            }
-        </dd>
+        
         @*<dt class = "col-sm-2">
                 @Html.DisplayNameFor(model => model.EndDate)
             </dt>

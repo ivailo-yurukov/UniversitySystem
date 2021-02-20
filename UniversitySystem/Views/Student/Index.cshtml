@@ -1,4 +1,4 @@
-﻿@model IEnumerable<UniversitySystem.Models.Student>
+﻿@model IEnumerable<UniversitySystem.ViewModels.StudentViewModel>
 
 @{
     ViewData["Title"] = "Student Page";
@@ -36,14 +36,16 @@
                 <td>
                     @foreach (var semester in @students.Semesters)
                     {
-                        @semester.SemesterName
+                        @semester
                         <br />
                     }
+
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@students.Id"><i class="fa fa-edit fa-lg"></i></a>
                     <a asp-action="Details" asp-route-id="@students.Id" class="text-info ml-2"><i class="fa fa-info-circle fa-lg"></i></a>
                     <a asp-action="Delete" asp-route-id="@students.Id" class="text-danger ml-2"><i class="fa fa-trash-alt fa-lg"></i></a>
+                    <a asp-action="AddStudentSemester" asp-route-id="@students.Id" class="text-primary ml-2"><i class="icon fa fa-graduation-cap fa-lg"></i><b></b></a>
                 </td>
             </tr>
         }

@@ -27,6 +27,8 @@ namespace UniversitySystem.Data
 
         public DbSet<Student> Students { get; set; }
 
+        public DbSet<StudentSemester> StudentSemesters { get; set; }
+
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
@@ -49,6 +51,8 @@ namespace UniversitySystem.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<StudentSemester>().HasKey(s => new { s.StudentId, s.SemesterId });
 
             this.ConfigureUserIdentityRelations(builder);
 
@@ -80,7 +84,6 @@ namespace UniversitySystem.Data
                     SemesterName = "Semester 1",
                     StartDate = new DateTime(2019, 09, 20),
                     EndDate = new DateTime(2020, 03, 16),
-                    StudentId = 1,
                 },
                 new Semester
                 {
@@ -89,26 +92,48 @@ namespace UniversitySystem.Data
                     SemesterName = "Semester 2",
                     StartDate = new DateTime(2020, 03, 16),
                     EndDate = new DateTime(2020, 06, 16),
+                });
+
+            builder.Entity<StudentSemester>().HasData(
+                new StudentSemester
+                {
                     StudentId = 1,
+                    SemesterId = 1,
+                },
+                new StudentSemester
+                {
+                    StudentId = 1,
+                    SemesterId = 2,
+                });
+            builder.Entity<Discipline>().HasData(
+                new Discipline
+                {
+                    Id = 1,
+                    CreatedOn = new DateTime(2021, 01, 31),
+                    DisciplineName = "Math",
+                    ProfessorName = "Newton",
+                    SemesterId = 1,
+                },
+                new Discipline
+                {
+                    Id = 2,
+                    CreatedOn = new DateTime(2021, 01, 31),
+                    DisciplineName = "Programming",
+                    ProfessorName = "Mustain",
+                    SemesterId = 1,
                 });
             builder.Entity<Score>().HasData(
                 new Score
                 {
                     Id = 1,
-                    CreatedOn = new DateTime(2021, 01, 21),
-                    DisiplineName = "Math",
-                    ProfessorName = "Newton",
-                    ScoreNumber = 4,
-                    SemesterId = 1,
+                    ScoreNumber = 5,
+                    DisciplineId = 1,
                 },
                 new Score
                 {
                     Id = 2,
-                    CreatedOn = new DateTime(2021, 01, 21),
-                    DisiplineName = "History",
-                    ProfessorName = "Ivanov",
-                    ScoreNumber = 5,
-                    SemesterId = 1,
+                    ScoreNumber = 6,
+                    DisciplineId = 2,
                 });
         }
 
@@ -137,7 +162,5 @@ namespace UniversitySystem.Data
                 }
             }
         }
-
-        public DbSet<UniversitySystem.ViewModels.DisciplineViewModel> DisciplineViewModel { get; set; }
     }
 }

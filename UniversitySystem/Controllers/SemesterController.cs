@@ -38,6 +38,7 @@ namespace UniversitySystem.Controllers
                .Select(x =>
                new SemesterViewModel
                {
+                   Id = x.Id,
                    SemesterName = x.SemesterName,
                    StartDate = x.StartDate,
                    EndDate = x.EndDate,
@@ -54,7 +55,7 @@ namespace UniversitySystem.Controllers
 
             return View(semesterViewModel);
         }
-      
+
         // GET: SemesterController/Create
         public ActionResult Create()
         {
@@ -64,16 +65,15 @@ namespace UniversitySystem.Controllers
         // POST: SemesterController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Semester semester)
+        public async Task<IActionResult> Create(Semester semester)
         {
-            try
+            if (ModelState.IsValid)
             {
+                await context.AddAsync(semester);
+                await context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+            return View(semester);
         }
 
         // GET: SemesterController/Edit/5
@@ -98,24 +98,36 @@ namespace UniversitySystem.Controllers
         }
 
         // GET: SemesterController/Delete/5
-        public ActionResult Delete(int id)
+        public IActionResult Delete(int id)
         {
-            return View();
+            var semester = context.Semesters.Find(id);
+            var semesterViewModel = new SemesterViewModel
+            {
+                SemesterName = semester.SemesterName,
+                StartDate = semester.StartDate,
+                EndDate = semester.EndDate,
+            };
+
+            return View(semesterViewModel);
         }
 
         // POST: SemesterController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> Delete(SemesterViewModel semesterViewModel)
         {
-            try
+            var isSemesterConnectToStudent = context.StudentSemesters
+                .Any(x => x.SemesterId == semesterViewModel.Id);
+
+            if (!isSemesterConnectToStudent)
             {
+                var semester = context.Semesters.Find(semesterViewModel.Id);
+                context.Remove(semester);
+                await context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+
+            return NotFound("The semester is connected with student(s)");
         }
     }
 }

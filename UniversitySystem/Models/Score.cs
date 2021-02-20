@@ -1,17 +1,17 @@
 ﻿using AspNetCoreTemplate.Data.Common.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace UniversitySystem.Models
 {
-    public class Score : BaseModel<int>
+    public class Score
     {
-        public string DisiplineName { get; set; }
-
-        public string ProfessorName { get; set; }
+        [Key]
+        public int Id { get; set; }
 
         public int ScoreNumber { get; set; }
 
-        public int? SemesterId { get; set; }
+        public int? DisciplineId { get; set; }
 
-        public virtual Semester Semester { get; set; }
+        public virtual Discipline Discipline { get; set; }
     }
 }
